@@ -1,29 +1,20 @@
-import { BaseEntity, Column, CreateDateColumn, Double, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BookingCategory } from "./BookingCategory";
+import { User } from "../../entities/auth/User";
 
 @Entity({ name: 'bookings' })
 export class Booking extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({
-    name: 'booking_category_id',
-    nullable: true,
-  })
-  booking_category_id: number;
+  @ManyToOne((type) => BookingCategory, (category) => category.id)
+  category: BookingCategory
 
+  @ManyToOne((type) => User, (user) => user.id)
+  user: User
 
-  @Column({
-    name: 'user_id',
-    nullable: true,
-  })
-  user_id: number;
-
-  @Column({
-    name: 'doctor_id',
-    nullable: true,
-  })
-  doctor_id: number;
+  @ManyToOne((type) => User, (doctor) => doctor.id)
+  doctor: User
 
   @Column({
     name: 'title',
@@ -32,16 +23,10 @@ export class Booking extends BaseEntity {
   title: string;
 
   @Column({
-    name: 'decription',
+    name: 'description',
     nullable: true,
   })
-  decription: string;
-
-  @Column({
-    name: 'date',
-    nullable: true,
-  })
-  date: string;
+  description: string;
 
   @Column({
     name: 'date_time',

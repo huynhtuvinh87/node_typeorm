@@ -1,7 +1,7 @@
-import { BaseEntity, Column, CreateDateColumn, 
-  Double, Entity, JoinColumn, ManyToOne, 
-  PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-
+import {
+  BaseEntity, Column, CreateDateColumn, Entity,
+  PrimaryGeneratedColumn, UpdateDateColumn
+} from 'typeorm';
 @Entity({ name: 'sick_types' })
 export class SickType extends BaseEntity {
 
@@ -15,6 +15,12 @@ export class SickType extends BaseEntity {
   title: string;
 
   @Column({
+    name: 'slug',
+    nullable: true,
+  })
+  slug: string;
+
+  @Column({
     name: 'icon',
     nullable: true,
   })
@@ -25,6 +31,13 @@ export class SickType extends BaseEntity {
     nullable: false,
   })
   key: number;
+
+  @Column({
+    name: 'status',
+    nullable: true,
+    default: false
+  })
+  status: boolean; // active / deactive
 
   @CreateDateColumn({
     name: 'created_at',

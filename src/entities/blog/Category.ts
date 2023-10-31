@@ -38,6 +38,12 @@ export class Category extends BaseEntity {
   })
   slug: string;
 
+  @Column('text',{
+    name: 'description',
+    nullable: true,
+  })
+  description: string;
+
   @Column({
     name: 'status',
     nullable: true,

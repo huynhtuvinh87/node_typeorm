@@ -1,5 +1,5 @@
 # SETUP AND RUN
-### Recommended Node version: Node 12.x, Node 14.x
+### Recommended Node version: Node 18.x
 ## A. Setup
 1. Create `.env` file from `.env.sample` file
 

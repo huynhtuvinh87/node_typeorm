@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, OneToOne, JoinColumn, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, ManyToOne } from "typeorm"
 import { User } from "./auth/User";
 
 @Entity('comments')
 export class Comment extends BaseEntity {
     @PrimaryGeneratedColumn()
-    uuid: Number;
+    id: Number;
 
     @Column()
     rate: number;
@@ -14,21 +14,29 @@ export class Comment extends BaseEntity {
     })
     fileImage: string;
 
-    @Column()
-    comment: string;
+    @Column('text', {
+        name: "content",
+        nullable: false
+    })
+    content: string;
 
-    @ManyToOne(() => User, user => user.comments)
-    author: User;
+    @ManyToOne(() => User, user => user.id)
+    user: User;
 
-    @Column('timestamp',{
+    @CreateDateColumn({
         name: 'created_at',
-        nullable: true
+        nullable: false
     })
     createdAt: string;
 
-    @Column('timestamp',{
+    @UpdateDateColumn({
         name: 'updated_at',
-        nullable: true
+        nullable: false
     })
     updatedAt: string;
+
+    constructor(partial: Partial<Comment>) {
+        super();
+        Object.assign(this, partial);
+    }
 }

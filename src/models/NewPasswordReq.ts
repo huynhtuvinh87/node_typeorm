@@ -1,7 +1,7 @@
 export interface NewPasswordReq {
-    username: string;
+    email: string;
     code: string;
-    newPass: string;
-    confirmPass: string;
+    new_password: string;
+    confirm_password: string;
   }
   

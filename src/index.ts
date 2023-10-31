@@ -39,7 +39,6 @@ type ModuleId = string | number;
 
 interface WebpackHotModule {
   hot?: {
-    // eslint-disable-next-line
     data: any;
     accept(dependencies: string[], callback?: (updatedDependencies: ModuleId[]) => void): void;
     accept(dependency: string, callback?: () => void): void;

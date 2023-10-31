@@ -1,10 +1,9 @@
-import { BaseEntity, Column, CreateDateColumn, Double, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { User } from './auth/User';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'location' })
+@Entity({ name: 'locations' })
 export class Location extends BaseEntity {
   @PrimaryGeneratedColumn()
-  uuid: number
+  id: number
 
   @Column({
     name: 'lat',
@@ -27,15 +26,15 @@ export class Location extends BaseEntity {
   })
   address: string;
 
-  @Column('timestamp', {
+  @CreateDateColumn({
     name: 'created_at',
-    nullable: true
+    nullable: false
   })
   createdAt: string;
 
-  @Column('timestamp', {
+  @UpdateDateColumn({
     name: 'updated_at',
-    nullable: true
+    nullable: false
   })
   updatedAt: string;
 

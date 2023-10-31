@@ -10,8 +10,6 @@ import 'reflect-metadata';
 import Container from 'typedi';
 import { createConnection, useContainer } from 'typeorm';
 import * as entities from './entities/index';
-import * as many2manyEntities from './entities/many2many/index';
-import * as one2oneEntities from './entities/one2one/index';
 import * as ormconfig from '../ormconfig';
 import express from 'express';
 
@@ -54,22 +52,22 @@ class ApiServer extends Server {
     }
 
     // many2manyEntities example
-    for (const name in many2manyEntities) {
-      if (Object.prototype.hasOwnProperty.call(many2manyEntities, name)) {
-        // eslint-disable-next-line
-        const entity: any = (many2manyEntities as any)[name];
-        arrEntities.push(entity);
-      }
-    }
+    // for (const name in many2manyEntities) {
+    //   if (Object.prototype.hasOwnProperty.call(many2manyEntities, name)) {
+    //     // eslint-disable-next-line
+    //     const entity: any = (many2manyEntities as any)[name];
+    //     arrEntities.push(entity);
+    //   }
+    // }
 
-    // one2oneEntities example
-    for (const name in one2oneEntities) {
-      if (Object.prototype.hasOwnProperty.call(one2oneEntities, name)) {
-        // eslint-disable-next-line
-        const entity: any = (one2oneEntities as any)[name];
-        arrEntities.push(entity);
-      }
-    }
+    // // one2oneEntities example
+    // for (const name in one2oneEntities) {
+    //   if (Object.prototype.hasOwnProperty.call(one2oneEntities, name)) {
+    //     // eslint-disable-next-line
+    //     const entity: any = (one2oneEntities as any)[name];
+    //     arrEntities.push(entity);
+    //   }
+    // }
 
     // eslint-disable-next-line
     const configDB: any = {

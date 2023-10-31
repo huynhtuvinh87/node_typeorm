@@ -9,9 +9,6 @@ export class Office extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(() => User, (user) => user.id)
-  user: User
-
   // admin approve account this doctor
   @Column({
     nullable: true,

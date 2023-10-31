@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Double, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 // MEDICINE_MEDICINAL = 0, // Thuốc Nam 
 // MEDICINE_TRADICTIONAL = 1, // thuốc tây 

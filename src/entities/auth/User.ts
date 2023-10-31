@@ -2,7 +2,6 @@ import { Roles } from '../../consts/Roles';
 import { Location } from '../Location';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { Comment } from '../Comment';
 import { Length, IsEmail } from "class-validator";
 import { Doctor } from './Doctor';
 import { Office } from './Office';
@@ -87,7 +86,7 @@ export class User extends BaseEntity {
     default: false,
     nullable: true
   })
-  accountPlus: boolean;
+  account_plus: boolean;
 
   @Column({
     name: 'coin_view_ads_video',
@@ -135,9 +134,6 @@ export class User extends BaseEntity {
     nullable: true
   })
   appleId: string;
-
-  @OneToMany(() => Comment, (commet) => commet.author)
-  comments: Comment[];
 
   @Column('timestamp', {
     nullable: true

@@ -19,20 +19,44 @@ export class BannerAds extends BaseEntity {
   photo: string;
 
   @Column({
-    name: 'desciption',
-    nullable: false,
+    name: 'link',
+    nullable: true,
   })
-  desciption: string;
+  link: string;
 
-  @Column('timestamp', {
+  @Column({
+    name: 'description',
+    nullable: true,
+  })
+  description: string;
+
+  @Column({
+    name: 'type',
+    nullable: true,
+  })
+  type: number;
+
+  @Column({
+    name: 'order',
+    nullable: true,
+  })
+  order: number;
+
+  @Column({
+    name: 'status',
+    nullable: true,
+  })
+  status: boolean;
+
+  @CreateDateColumn({
     name: 'created_at',
-    nullable: true
-  })
-  createdAt: string;
+    nullable: false
+    })
+    createdAt: string;
 
-  @Column('timestamp', {
-    name: 'updated_at',
-    nullable: true
+  @UpdateDateColumn({
+  name: 'updated_at',
+  nullable: false
   })
   updatedAt: string;
 

@@ -1,16 +1,12 @@
 
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { User } from './User';
 
 @Entity({ name: 'phamarcys' })
 export class Phamarcy extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number
-
-  @ManyToOne(() => User, (user) => user.id)
-  user: User
 
   // admin approve account this doctor
   @Column({
@@ -46,6 +42,7 @@ export class Phamarcy extends BaseEntity {
 
   @Column({
     name: 'money_ads',
+    nullable: true,
   })
   money: number;
 

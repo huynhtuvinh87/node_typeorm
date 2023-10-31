@@ -9,5 +9,9 @@ export class SickTypeService extends BaseService<SickType, SickTypeRepository> {
   constructor(@InjectRepository(SickType) repository: SickTypeRepository) {
     super(repository);
   }
+
+  findByKey(key: number): Promise<SickType | null> {
+    return this.repository.findOne({ key: key });
+  }
 }
 

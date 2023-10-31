@@ -1,7 +1,8 @@
 
 export class BaseResponse {
-    status: number;
+    status: number = 200;
+    success : boolean = true;
     data: object;
-    message: string;
+    message: string = "Success";
     error: number = 0;
 }

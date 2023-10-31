@@ -15,6 +15,10 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
     return await this.repository.findAndCount(options);
   }
 
+  async get(options?: FindManyOptions<T>): Promise<T[]> {
+    return await this.repository.find(options);
+  }
+
   async index(options?: FindManyOptions<T>): Promise<T[]> {
     return await this.repository.find(options);
   }

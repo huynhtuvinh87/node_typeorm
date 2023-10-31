@@ -4,7 +4,10 @@ import { UserService } from '../../services/UserService';
 import { User } from '../../entities/auth/User';
 import { Service } from 'typedi';
 import * as bcrypt from 'bcryptjs';
+import { RegisterReq } from '../../models/RegisterReq'
 var nodemailler = require('nodemailer');
+import { BaseResponse } from '../../services/BaseResponse';
+
 
 const option = {
   service: 'gmail',
@@ -20,17 +23,34 @@ var transporter = nodemailler.createTransport(option);
 @Controller('api')
 export class RegisterController {
 
+  private dataResponse: BaseResponse = new BaseResponse();
+
   constructor(private readonly userService: UserService) { }
 
 
   @Post('register')
-  private async register(req: Request, res: Response, next: NextFunction,): Promise<void> {
+  private async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const user: User = <User>req.body;
-      if (await this.userService.findByUserName(user.username) ||
-        await this.userService.findByEmail(user.email)) {
-        res.status(422).json({ data: 'Tài khoản đã được đăng ký' })
+      const user: RegisterReq = <RegisterReq>req.body;
+      if (user.username) {
+        this.dataResponse.message = ' Username already exists ';
+        this.dataResponse.data = await this.userService.findByUserName(user.username) || null
       }
+      if (user.email) {
+        this.dataResponse.message = 'Email already exists ';
+        this.dataResponse.data = await this.userService.findByEmail(user.email) || null
+      }
+      if (user.phone) {
+        this.dataResponse.message = ' Phone already exists ';
+        this.dataResponse.data = await this.userService.findByPhone(user.phone.replace(" ", "")) || null
+      }
+
+      if (this.dataResponse.data) {
+        this.dataResponse.data = null
+        res.status(400).json(this.dataResponse);
+        return;
+      }
+
       var salt = bcrypt.genSaltSync(8);
       user.name = req.body.name
       user.username = req.body.username
@@ -38,6 +58,7 @@ export class RegisterController {
       user.password = bcrypt.hashSync(req.body.password, salt)
       user.role = req.body.role
       user.device_token = req.body.device_token
+      
       user.code = Math.floor(1000 + Math.random() * 9000).toString();
 
       const newUser: User = await this.userService.store(user).catch((e) => {
