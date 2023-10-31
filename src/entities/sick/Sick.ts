@@ -1,9 +1,10 @@
-import { BaseEntity, Column, CreateDateColumn,
-   Double, Entity, JoinColumn,
-    ManyToOne, PrimaryGeneratedColumn,
-     UpdateDateColumn 
-    } from 'typeorm';
-
+import {
+  BaseEntity, Column, CreateDateColumn,
+  Double, Entity, JoinColumn,
+  ManyToOne, PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm';
+import { SickCategory } from './SickCategory';
 @Entity({ name: 'sicks' })
 export class Sick extends BaseEntity {
 
@@ -17,32 +18,27 @@ export class Sick extends BaseEntity {
   title: string;
 
   @Column({
-    name: 'sub_type_id',
+    name: 'slug',
     nullable: true,
   })
-  subTypeId: number;
+  slug: string;
 
-  @Column({
-    name: 'sick_category_id',
-    nullable: true,
-  })
-  categoryId: number;
+  @ManyToOne((type) => SickCategory, (sickCategory) => sickCategory.id)
+  sickCategory: SickCategory
 
   @Column({
     name: 'status',
     nullable: true,
-    default: false
   })
   status: boolean; // active / deactive
 
   @Column({
     name: 'gender',
     nullable: true,
-    default: false
   })
   gender: boolean; // Nam/ Nu 
 
-  
+
   @Column({
     name: 'photo',
     nullable: true,
@@ -50,13 +46,13 @@ export class Sick extends BaseEntity {
   photo: string;
 
   // mô tả nội dung về bệnh nếu có 
-  @Column({
+  @Column('text' ,{
     name: 'description',
     nullable: true,
   })
   description: string;
 
-  @Column({
+  @Column('text',{
     name: 'content',
     nullable: true,
   })

@@ -20,7 +20,7 @@ export const uploadMiddleware = (fieldName: string, fileSizeLimited: number) => 
         destination: process.env.UPLOAD_FOLDER,
         // eslint-disable-next-line
         filename(req, file, callback) {
-          callback(null, `${path.basename(file.originalname.replace(/[^\d\w.]/g, '-'))}`);
+          callback(null, `${path.basename(Date.now() + file.originalname.replace(/[^\d\w.]/g, '-'))}`);
         }
       }),
       limits: {
@@ -29,7 +29,6 @@ export const uploadMiddleware = (fieldName: string, fileSizeLimited: number) => 
     }).single(fieldName);
     // eslint-disable-next-line
     result(req, res, function (err: any) {
-      res.status(200).send(err)
       if (err === undefined) {
         next();
       } else {

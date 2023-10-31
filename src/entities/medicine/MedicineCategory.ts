@@ -1,16 +1,14 @@
-import { BaseEntity, Column, CreateDateColumn, Double, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { MedicineType } from "./MedicineType";
 @Entity({ name: 'medicine_categories' })
 export class MedicineCategory extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({
-    name: 'medicine_type_id',
-    nullable: false,
-  })
-  medicine_type_id: number;
+  @ManyToOne((type) => MedicineType, (medicineType) => medicineType.id)
+  medicineType: MedicineType
+
 
   @Column({
     name: 'title',

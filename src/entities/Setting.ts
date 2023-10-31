@@ -1,9 +1,9 @@
 
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 
 @Entity({ name: 'settings' })
-export class User extends BaseEntity {
+export class Setting extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number
@@ -26,7 +26,22 @@ export class User extends BaseEntity {
   @Column({
     nullable: true,
   })
-  google_analytics_active: string;
+  term_of_use: string;
+
+  @Column({
+    nullable: true,
+  })
+  introduction: string;
+
+  @Column({
+    nullable: true,
+  })
+  version: string;
+
+  @Column({
+    nullable: true,
+  })
+  google_analytics_active: boolean;
 
   @Column({
     nullable: true,
@@ -56,7 +71,27 @@ export class User extends BaseEntity {
   @Column({
     nullable: true,
   })
-  facebook_active: string;
+  apple_active: boolean;
+
+  @Column({
+    nullable: true,
+  })
+  apple_api_key: string;
+
+  @Column({
+    nullable: true
+  })
+  apple_api_secret: string;
+
+  @Column({
+    nullable: true
+  })
+  apple_redirect_url: string;
+
+  @Column({
+    nullable: true,
+  })
+  facebook_active: boolean;
 
   @Column({
     nullable: true,
@@ -96,7 +131,7 @@ export class User extends BaseEntity {
   @Column({
     nullable: true,
   })
-  twitter_active: string;
+  twitter_active: boolean;
 
   @Column({
     nullable: true,
@@ -174,26 +209,20 @@ export class User extends BaseEntity {
   })
   openai_api_secret_5: string;
 
-
-  @Column('timestamp', {
+  @CreateDateColumn({
     name: 'created_at',
-    nullable: true
+    nullable: false
   })
   createdAt: string;
 
-  @Column('timestamp', {
+  @UpdateDateColumn({
     name: 'updated_at',
-    nullable: true
+    nullable: false
   })
   updatedAt: string;
 
-  constructor(partial: Partial<User>) {
+  constructor(partial: Partial<Setting>) {
     super();
     Object.assign(this, partial);
   }
-
-  // @Expose()
-  // get fullName(): string {
-  //   return `${this.firstName} ${this.lastName}`;
-  // }
 }

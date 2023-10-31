@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, TreeRepository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { SickType } from '../../entities/sick/SickType';
 import { Service } from 'typedi';
 

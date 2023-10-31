@@ -13,6 +13,7 @@ import { CodeRes } from 'src/models/CodeRes';
 import { NewPasswordReq } from 'src/models/NewPasswordReq';
 import { LocationRes } from 'src/models/LocationRes';
 import { BaseResponse } from './BaseResponse';
+import * as bcrypt from 'bcryptjs';
 var nodemailler = require('nodemailer');
 
 const option = {
@@ -112,9 +113,22 @@ export class AuthenService extends BaseService<User, UserRepository> {
 
     console.log('getByUsername');
 
-    const user: User | undefined = await this.repository.getByUsername(username).catch((err) => {
-      throw err;
-    });
+    var user: User;
+
+    try {
+      console.log('getByUsername');
+      user = await this.repository.getByUsername(username);
+      if (user == null) {
+        console.log('getByEmail');
+        user = await this.repository.getByEmail(username);
+      }
+      if (user == null) {
+        console.log('getByPhone');
+        user = await this.repository.getByPhone(username.replace(" ", ""));
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     console.log('user');
     console.log(user);
@@ -163,13 +177,13 @@ export class AuthenService extends BaseService<User, UserRepository> {
     console.log('start');
     console.log(body);
 
-    if (body.username.trim().length === 0) {
-      throw new AppException('login_failed', 'username  empty');
+    if (body.email.trim().length === 0) {
+      throw new AppException('login_failed', 'email  empty');
     }
 
-    console.log('getByUsername');
+    console.log('getByEmail');
 
-    const user: User | undefined = await this.repository.getByUsername(body.username).catch((err) => {
+    const user: User | undefined = await this.repository.getByEmail(body.email).catch((err) => {
       throw err;
     });
 
@@ -178,8 +192,10 @@ export class AuthenService extends BaseService<User, UserRepository> {
         throw new AppException('login_failed', 'Code not math');
       }
 
-      user.password = body.newPass;
-      await this.repository.updateNewPassword(body.username, body.newPass).catch((err) => {
+      var salt = bcrypt.genSaltSync(8);
+      const new_password = bcrypt.hashSync(body.new_password, salt);
+      user.password = new_password;
+      await this.repository.updateNewPassword(user.username, new_password).catch((err) => {
         throw err;
       });
 

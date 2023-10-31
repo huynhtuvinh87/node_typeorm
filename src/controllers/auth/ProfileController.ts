@@ -9,32 +9,43 @@ import { Service } from 'typedi';
 import { checkJwt } from '../../middleware/checkJwt.middleware';
 import { Office, Doctor, Phamarcy } from '../../entities/index';
 import * as bcrypt from 'bcryptjs';
+import Log from '../../utils/Log';
+import { BaseResponse } from '../../services/BaseResponse';
 
 @Service()
 @Controller('api/profile')
 export class ProfileController {
+
+  private dataResponse: BaseResponse = new BaseResponse();
+  private className = 'ProfileController';
+
   constructor(
     private readonly userService: UserService,
     private readonly officeService: OfficeService,
     private readonly phamacryService: PhamarcyService,
     private readonly doctorService: DoctorService) { }
+
   @Get('me')
   @Middleware([checkJwt])
   private async getProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+    Log.info(this.className, 'addUser', `RQ`, { req: req });
+    console.log(res.locals.jwtPayload);
     try {
-      const user: User = await this.userService.findById(res.locals.jwtPayload.uuid, {
-        relations: ['doctor', 'office', 'phamacry']
-      }).catch((e) => {
+      const user: User = await this.userService.findById(res.locals.jwtPayload['uuid'], { relations: ['address','doctor','office','phamarcy'] }).catch((e) => {
         throw e;
       });
-
-      res.status(200).json({ data: user });
+      this.dataResponse.success = true;
+      this.dataResponse.status = 200;
+      this.dataResponse.error = 0;
+      this.dataResponse.data = user;
+      this.dataResponse.message = 'Success';
+      res.status(200).json(this.dataResponse);
     } catch (e) {
       next(e);
     }
   }
 
-  @Get('change-password')
+  @Post('change-password')
   @Middleware([checkJwt])
   private async changePassword(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -50,75 +61,38 @@ export class ProfileController {
       if (req.body.new_password !== req.body.confirm_password) {
         res.status(422).json({ data: "Password khong trung" });
       }
-      const result = await this.userService.update(req.params.id, { password: new_password }).catch((e) => {
+      const id = res.locals.jwtPayload['uuid'];
+      const result = await this.userService.update(id, { password: new_password }).catch((e) => {
         throw e;
       });
 
-      res.status(200).json({ data: result });
+      this.dataResponse.success = true;
+      this.dataResponse.status = 200;
+      this.dataResponse.error = 0;
+      this.dataResponse.data = result;
+      this.dataResponse.message = 'Success';
+      res.status(200).json(this.dataResponse);
     } catch (e) {
       next(e);
     }
   }
 
-  @Post('doctor/:id')
+  @Put('update')
   @Middleware([checkJwt])
-  private async updateDoctor(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const doctor = new Doctor
-      doctor.about = req.body.about
-      doctor.infor_contact = req.body.infor_contact
-      doctor.certificate_file = req.body.certificate_file
-      doctor.logo = req.body.logo
-      doctor.banner_cover = req.body.banner_cover
+      const user: User = <User>req.body;
 
-      const result = await this.doctorService.update(req.params.id, doctor).catch((e) => {
+      const result = await this.userService.update(res.locals.jwtPayload.uuid, user).catch((e) => {
         throw e;
       });
-
-      res.status(200).json({ data: result });
+      this.dataResponse.data = result;
+      res.status(200).json(this.dataResponse);
     } catch (e) {
       next(e);
     }
   }
-
-  @Put('phamacry/:id')
-  @Middleware([checkJwt])
-  private async updatePhamacry(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      const phamacry = new Phamarcy
-      phamacry.about = req.body.about
-      phamacry.certificate_file = req.body.certificate_file
-      phamacry.logo = req.body.logo
-      phamacry.banner_cover = req.body.banner_cover
-      const result = await this.phamacryService.update(req.params.id, phamacry).catch((e) => {
-        throw e;
-      });
-
-      res.status(200).json({ data: result });
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  @Put('office/:id')
-  @Middleware([checkJwt])
-  private async updateOffice(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      const office = new Office
-      office.about = req.body.about
-      office.infor_contact = req.body.infor_contact
-      office.certificate_file = req.body.certificate_file
-      office.logo = req.body.logo
-      office.banner_cover = req.body.banner_cover
-      const result = await this.officeService.update(req.params.id, office).catch((e) => {
-        throw e;
-      });
-
-      res.status(200).json({ data: result });
-    } catch (e) {
-      next(e);
-    }
-  }
+  
 }
 
 

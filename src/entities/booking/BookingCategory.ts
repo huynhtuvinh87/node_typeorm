@@ -1,6 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Double, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { User } from '../auth/User';
-import { TYPE_MEDICINE } from '../MedicineType';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { SickCategory } from '../sick/SickCategory';
 
 // Khams bệnh từ xa 
 // Xét nghiệm máu 
@@ -13,17 +12,8 @@ export class BookingCategory extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({
-    name: 'sub_type_id',
-    nullable: true,
-  })
-  subTypeId: number;
-
-  @Column({
-    name: 'sick_category_id',
-    nullable: true,
-  })
-  categoryId: number;
+  @ManyToOne((type) => SickCategory, (sickCategory) => sickCategory.id)
+  sickCategory: SickCategory
 
   @Column({
     name: 'title',
@@ -32,46 +22,34 @@ export class BookingCategory extends BaseEntity {
   title: string;
 
   @Column({
-    name: 'photo',
-    nullable: true,
-  })
-  photo: string;
-
-  @Column({
     name: 'slug',
     nullable: true,
   })
   slug: string;
 
+  @Column('text',{
+    name: 'description',
+    nullable: true,
+  })
+  description: string;
+
+  @Column("text", {
+    name: 'consulting',
+    nullable: true,
+  })
+  consulting: string;
+
+  @Column("text", {
+    name: 'testing',
+    nullable: true,
+  })
+  testing: string;
+
   @Column({
-    name: 'decription',
+    name: 'price',
     nullable: true,
   })
-  decription: string;
-
-  @Column("text", {
-    name: 'content',
-    nullable: true,
-  })
-  content: string;
-
-  @Column("text", {
-    name: 'consulting_category',
-    nullable: true,
-  })
-  consulting_category: string;
-
-  @Column("text", {
-    name: 'testing_category',
-    nullable: true,
-  })
-  testing_category: string;
-
-  @Column("text", {
-    name: 'note',
-    nullable: true,
-  })
-  note: string;
+  price: number;
 
   @Column({
     name: 'status',
@@ -79,11 +57,6 @@ export class BookingCategory extends BaseEntity {
   })
   status: boolean;
 
-  @Column({
-    name: 'price',
-    nullable: true,
-  })
-  price: number;
 
   @CreateDateColumn({
     name: 'created_at',

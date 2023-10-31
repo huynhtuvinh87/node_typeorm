@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'pages' })
 export class Page extends BaseEntity {
@@ -7,43 +7,37 @@ export class Page extends BaseEntity {
     id: number
 
     @Column({
-        name: 'status',
-        default: false
-    })
-    status: boolean;
-
-    @Column({
         name: 'title',
     })
     title: string;
 
     @Column({
         name: 'slug',
-        nullable: false
+        nullable: true
     })
     slug: string;
 
     @Column('text',{
-        name: 'description',
-        nullable: false
-    })
-    description: string;
-
-    @Column('text',{
         name: 'content',
-        nullable: false
+        nullable: true
     })
     content: string;
 
-    @Column('timestamp',{
-        name: 'created_at',
-        nullable: false
+    @Column({
+        name: 'status',
+        nullable: true,
+    })
+    status: boolean;
+
+    @CreateDateColumn({
+    name: 'created_at',
+    nullable: false
     })
     createdAt: string;
 
-    @Column('timestamp',{
-        name: 'updated_at',
-        nullable: false
+    @UpdateDateColumn({
+    name: 'updated_at',
+    nullable: false
     })
     updatedAt: string;
 

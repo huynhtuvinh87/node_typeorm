@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Double, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { MedicineCategory } from './MedicineCategory';
 
 @Entity({ name: 'medicines' })
 export class Medicine extends BaseEntity {
@@ -6,17 +7,8 @@ export class Medicine extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({
-    name: 'medicine_type_id',
-    nullable: false,
-  })
-  medicine_type_id: number;
-
-  @Column({
-    name: 'medicine_category_id',
-    nullable: false,
-  })
-  medicine_category_id: number;
+  @ManyToOne((type) => MedicineCategory, (medicineCategory) => medicineCategory.id)
+  medicineCategory: MedicineCategory
 
   @Column({
     name: 'title',
@@ -36,11 +28,6 @@ export class Medicine extends BaseEntity {
   })
   slug: string;
 
-  @Column({
-    name: 'status',
-    nullable: true,
-  })
-  status: boolean;
 
   @Column("text", {
     name: 'content',
@@ -53,6 +40,13 @@ export class Medicine extends BaseEntity {
     nullable: true,
   })
   description: string;
+
+
+  @Column({
+    name: 'status',
+    nullable: true,
+  })
+  status: boolean;
 
   @CreateDateColumn({
     name: 'created_at',
